@@ -2,6 +2,9 @@ package de.thorstendiekhof.lex.customerservice.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +20,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4000/")
 public class CustomerController {
+
+    private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
+
 
     private final CustomerRepository repository;
 
@@ -27,24 +34,28 @@ public class CustomerController {
 
     @GetMapping("/customers")
     List<Customer> getCustomers() {
+        log.info("GET/customers");
         return repository.findAll();
     }
 
     @SuppressWarnings("null")
     @PostMapping("/customers")
     Customer newCustomer(@RequestBody Customer newCustomer) {
+        log.info("POST/customers " + newCustomer);
         return repository.save(newCustomer);
     }
     
     @SuppressWarnings("null")
     @GetMapping("/customers/{id}")
     Customer getCustomer(@PathVariable Long id) {
+        log.info("GET/customers/" + id);
         return repository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     @SuppressWarnings("null")
     @PutMapping("/customers/{id}")
     Customer updateCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {        
+        log.info("PUT/customers/" + id + " " + newCustomer);
         return repository.findById(id).map(customer -> {
             customer.setFirstName(newCustomer.getFirstName());
             customer.setLastName(newCustomer.getLastName());
@@ -64,6 +75,7 @@ public class CustomerController {
     @SuppressWarnings("null")
     @DeleteMapping("/customers/{id}")
     void deleteCustomers(@PathVariable Long id){
+        log.info("DELETE/customers/" + id);
         repository.deleteById(id);
     }
 }

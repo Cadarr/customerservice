@@ -6,15 +6,13 @@ import jakarta.persistence.Id;
 
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-
 @Entity
 public class Customer {
 
     private @Id @GeneratedValue Long id;
-    private @Column(nullable = false) String firstName;
-    private @Column(nullable = false) String lastName;
-    private @Column(length = 100) String notes;
+    private String firstName;
+    private String lastName;
+    private String notes;
     private String vatId;
     private String addressAddition;
     private String streetAndNumber;
@@ -28,6 +26,19 @@ public class Customer {
     Customer(String fistName, String lastName) {
         this.firstName = fistName;
         this.lastName = lastName;
+    }
+
+    public Customer(String firstName, String lastName, String notes, String vatId, String addressAddition,
+            String streetAndNumber, String postalCode, String city, String country) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.notes = notes;
+        this.vatId = vatId;
+        this.addressAddition = addressAddition;
+        this.streetAndNumber = streetAndNumber;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.country = country;
     }
 
     public Long getId() {
@@ -138,15 +149,15 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-               "id=" + id +
-               ", firstName='" + firstName + '\'' +
-               ", lastName='" + lastName + '\'' +
-               ", vatId='" + vatId + '\'' +
-               ", streetAndNumber='" + streetAndNumber + '\'' +
-               ", postalCode='" + postalCode + '\'' +
-               ", city='" + city + '\'' +
-               ", country='" + country + '\'' +
-               '}';
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", vatId='" + vatId + '\'' +
+                ", streetAndNumber='" + streetAndNumber + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
-    
+
 }

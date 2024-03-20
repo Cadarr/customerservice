@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4000/")
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerController.class);

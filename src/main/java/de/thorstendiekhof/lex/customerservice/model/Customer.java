@@ -3,6 +3,8 @@ package de.thorstendiekhof.lex.customerservice.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -10,8 +12,14 @@ import java.util.Objects;
 public class Customer {
 
     private @Id @GeneratedValue Long id;
+
+    @NotNull(message = "The first name cannot be null")
     private String firstName;
+
+    @NotNull(message = "The last name cannot be null")
     private String lastName;
+
+    @Size(max = 100, message = "The notes can be a maximum of 100 characters long")
     private String notes;
     private String vatId;
     private String addressAddition;

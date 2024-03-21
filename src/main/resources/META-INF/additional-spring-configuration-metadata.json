@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "vatid.verification.api.url",
+  "type": "java.lang.String",
+  "description": "The url of the API call to verify a VAT ID"
+}]}

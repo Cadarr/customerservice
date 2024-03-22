@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.thorstendiekhof.lex.customerservice.error.CustomerNotFoundException;
-import de.thorstendiekhof.lex.customerservice.error.VatIdNotVerifiedException;
 import de.thorstendiekhof.lex.customerservice.model.Customer;
 import de.thorstendiekhof.lex.customerservice.repository.CustomerRepository;
 import de.thorstendiekhof.lex.customerservice.service.CustomerVatIdValidationService;
-import de.thorstendiekhof.lex.customerservice.service.CustomerVatIdValidator;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;

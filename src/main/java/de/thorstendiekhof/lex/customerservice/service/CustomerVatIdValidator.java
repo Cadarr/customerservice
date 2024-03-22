@@ -23,24 +23,25 @@ public class CustomerVatIdValidator implements CustomerVatIdValidationService {
     @Override
     public void validate(Customer target) {
         Customer customer = (Customer) target;
-        if(customer.getVatId() == null || customer.getVatId().length() == 0 ) return;
+        if (customer.getVatId() == null || customer.getVatId().length() == 0)
+            return;
         try {
             String vatId = customer.getVatId();
             String countryCode = vatId.substring(0, 2);
             String vatNumber = vatId.substring(2);
-    
+
             String url = vatidApiUrlTemplate
                     .replace("{countryCode}", countryCode)
                     .replace("{vatNumber}", vatNumber);
 
             log.info("Validate the VAT ID with the GET request : " + url);
             ResponseEntity<VatResponse> response = restTemplate.getForEntity(url, VatResponse.class);
-
             VatResponse vatResponse = response.getBody();
-
             if (vatResponse != null && !vatResponse.isValid()) {
                 throw new VatIdNotVerifiedException("The VAT ID is invalid.");
             }
+        } catch (VatIdNotVerifiedException e) {
+            throw e;
         } catch (Exception e) {
             throw new VatIdNotVerifiedException("The VAT ID could not be verified.");
         }

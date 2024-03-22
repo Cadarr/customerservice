@@ -15,6 +15,7 @@ import de.thorstendiekhof.lex.customerservice.error.CustomerNotFoundException;
 import de.thorstendiekhof.lex.customerservice.error.VatIdNotVerifiedException;
 import de.thorstendiekhof.lex.customerservice.model.Customer;
 import de.thorstendiekhof.lex.customerservice.repository.CustomerRepository;
+import de.thorstendiekhof.lex.customerservice.service.CustomerVatIdValidationService;
 import de.thorstendiekhof.lex.customerservice.service.CustomerVatIdValidator;
 import jakarta.validation.Valid;
 
@@ -32,10 +33,10 @@ public class CustomerController {
 
 
     private final CustomerRepository repository;
-    private final CustomerVatIdValidator customerVatIdValidator;
+    private final CustomerVatIdValidationService customerVatIdValidator;
 
 
-    CustomerController(CustomerRepository repository, CustomerVatIdValidator customerVatIdValidator) {
+    CustomerController(CustomerRepository repository, CustomerVatIdValidationService customerVatIdValidator) {
         this.repository = repository;
         this.customerVatIdValidator = customerVatIdValidator;
     }
@@ -48,12 +49,9 @@ public class CustomerController {
 
     @SuppressWarnings("null")
     @PostMapping("/customers")
-    Customer newCustomer(@Valid @RequestBody Customer newCustomer, Errors errors) {
+    Customer newCustomer(@Valid @RequestBody Customer newCustomer) {
         log.info("POST/customers " + newCustomer);
-        customerVatIdValidator.validate(newCustomer, errors);
-        if (errors.hasErrors()) {
-            throw new VatIdNotVerifiedException(errors.getFieldError().getDefaultMessage());
-        }
+        customerVatIdValidator.validate(newCustomer);
         return repository.save(newCustomer);
     }
     
@@ -66,12 +64,9 @@ public class CustomerController {
 
     @SuppressWarnings("null")
     @PutMapping("/customers/{id}")
-    Customer updateCustomer(@PathVariable Long id, @RequestBody Customer newCustomer, Errors errors) {        
+    Customer updateCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {        
         log.info("PUT/customers/" + id + " " + newCustomer);
-        customerVatIdValidator.validate(newCustomer, errors);
-        if (errors.hasErrors()) {
-            throw new VatIdNotVerifiedException(errors.getFieldError().getDefaultMessage());
-        }
+        customerVatIdValidator.validate(newCustomer);
         return repository.findById(id).map(customer -> {
             customer.setFirstName(newCustomer.getFirstName());
             customer.setLastName(newCustomer.getLastName());

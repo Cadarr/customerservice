@@ -9,26 +9,21 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import de.thorstendiekhof.lex.customerservice.error.VatIdNotVerifiedException;
 import de.thorstendiekhof.lex.customerservice.model.Customer;
 
 @Component
-public class CustomerVatIdValidator implements Validator {
+public class CustomerVatIdValidator implements CustomerVatIdValidationService {
     private static final Logger log = LoggerFactory.getLogger(CustomerVatIdValidator.class);
 
     @Value("${vatid.verification.api.url}")
     private String vatidApiUrlTemplate;
 
     private RestTemplate restTemplate = new RestTemplate();
-    
-    @SuppressWarnings("null")
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Customer.class.equals(clazz);
-    }
 
     @SuppressWarnings("null")
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(Customer target) {
         Customer customer = (Customer) target;
         if(customer.getVatId() == null || customer.getVatId().length() == 0 ) return;
         try {
@@ -46,10 +41,10 @@ public class CustomerVatIdValidator implements Validator {
             VatResponse vatResponse = response.getBody();
 
             if (vatResponse != null && !vatResponse.isValid()) {
-                errors.rejectValue("vatId", "VatId.validation.error", "The VAT ID is invalid.");
+                throw new VatIdNotVerifiedException("The VAT ID is invalid.");
             }
         } catch (Exception e) {
-            errors.rejectValue("vatId", "VatId.validation.error", "The VAT ID could not be verified.");
+            throw new VatIdNotVerifiedException("The VAT ID could not be verified.");
         }
     }
 

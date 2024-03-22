@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import de.thorstendiekhof.lex.customerservice.error.VatIdNotVerifiedException;
 import de.thorstendiekhof.lex.customerservice.model.Customer;
